@@ -1,11 +1,10 @@
-Docker
+docker
 =====
 
-Docker is a remake of the OSX dock and its magnification feature. Built with the [Famous](http://famo.us) library, the dock icons dynamically expand as you hover the mouse, shifting adjacent icons appropriately. Clicking on the icon brings up a surface, which in this demo simply shows an upscaled version of the icon. In a real app, this surface could host any element(s).
+<i>docker</i> is a remake of the OSX dock and its magnification feature. Built with the [Famous](http://famo.us) library, the dock icons dynamically expand as you hover the mouse, shifting adjacent icons appropriately. Clicking on the icon brings up a surface, which in this demo simply shows an upscaled version of the icon. In a real app, this surface could host any element(s).
 
 [Live Demo](http://peacechen.github.io/docker/)
-
-<img width="100%" src="https://cloud.githubusercontent.com/assets/6295083/3900374/96e59e7e-228b-11e4-8982-1a359fa94e6d.png">
+<a href="http://peacechen.github.io/docker/"><img width="100%" src="https://cloud.githubusercontent.com/assets/6295083/3900374/96e59e7e-228b-11e4-8982-1a359fa94e6d.png"></a>
 
 Installation
 ========
