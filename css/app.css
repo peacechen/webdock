@@ -1,0 +1,21 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+} 
+
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.desktop {
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    background-image: url('../img/blue_bokeh_background.jpg');
+    background-color: #2E6F95;
+}
+
+.window {
+}
