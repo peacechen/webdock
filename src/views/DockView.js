@@ -36,10 +36,11 @@ define(function(require, exports, module) {
     DockView.prototype.constructor = DockView;
     DockView.prototype.animateIcons = function() {
         var transition = this.options.transition;
-        var xOffset = IconView.DEFAULT_OPTIONS.xOffset;
-        var yOffset = IconView.DEFAULT_OPTIONS.yOffset;
+        var xOffset, yOffset;
         var delay = this.options.staggerDelay;
         for(var i = 0; i < this.iconViews.length; i++) {
+            xOffset = this.iconViews[i].options.xOffset;
+            yOffset = this.iconViews[i].options.yOffset;
             Timer.setTimeout(function(i) {
                 this.iconViews[i].positionModifier.setTransform(
                     Transform.translate( xOffset, yOffset, 0), transition);
@@ -63,16 +64,16 @@ define(function(require, exports, module) {
         this.iconViews = [];
         this.sequentialLayout.sequenceFrom(this.iconViews);
 
-        var seqLayoutModifier = new StateModifier({
-            origin: [0.5, 1],
-            align : [0.5, 1],
+        this.sequentialLayout.seqLayoutModifier = new StateModifier({
+            origin: [0, 0],
+            align : [0, 0]
         });
-        seqLayoutModifier.setOpacity(1, { duration:0, curve: 'linear' }, function() {
+        this.sequentialLayout.seqLayoutModifier.setOpacity(1, { duration:0, curve: 'linear' }, function() {
             //Add icons in callback so we can get the size of the desktopSurface.
             //The icon sizes are scaled based on the width of the browser.
             if(this.options.desktopSurface != {}) {
                 var size = this.options.desktopSurface.getSize();
-                this.iconSize = Math.min(0.8*size[0]/this.options.menuData.length, IconView.DEFAULT_OPTIONS.iconSize);
+                this.iconSize = 0.9*size[0]/this.options.menuData.length; //90% viewport width
                 this.center = size[0] / 2;
             }
             else {
@@ -82,22 +83,24 @@ define(function(require, exports, module) {
 
             // Fan-out effect when first showing the dock icons.
             // The distance from the center to any icon is relative to its position in the SequentialLayout.
+            var xOffset = 0.05*this.options.desktopSurface.getSize()[0]; //5% margin
             for (var i=0; i < this.options.menuData.length; i++) {
                 this.iconViews.push( new IconView({
                     iconSize: this.iconSize,
+                    xOffset: xOffset,
                     xOffsetStart: this.center - this.iconSize*i,
                     yOffsetStart: this.iconSize,
                     iconUrl: this.options.menuData[i].iconUrl,
                     title: this.options.menuData[i].title,
                     pageView: this.options.pageView,
-                    dockView: this,
+                    dockView: this
                 }));
             }
 
             this.animateIcons();
         }.bind(this));
 
-        this.add(seqLayoutModifier).add(this.sequentialLayout);
+        this.add(this.sequentialLayout.seqLayoutModifier).add(this.sequentialLayout);
     }
 
     module.exports = DockView;

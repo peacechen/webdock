@@ -38,6 +38,10 @@ define(function(require, exports, module) {
 
     DesktopView.prototype = Object.create(View.prototype);
     DesktopView.prototype.constructor = DesktopView;
+
+    DesktopView.prototype._showWeb = function() {
+    }
+
     DesktopView.prototype._showEgg = function() {
         if(typeof(this.eggSurface) != 'undefined')
             return;
@@ -61,24 +65,25 @@ define(function(require, exports, module) {
         targetSize : [600, 500],
         rotateXTransition: { duration: 800, curve: 'easeOut' },
         flyAwayTransition: { duration: 2000, curve: 'easeOut' },
-        lightboxOpts: { //for windowSurface animations
+        lightboxOpts: { //for imgSurface animations
             inTransform: Transform.scale(0.001, 0.001, 0.001),
             inTransition: { duration: 500, curve: Easing.outBack },
             inOrigin: [0, 1],
+            inAlign: [0, 1],
             inOpacity: 0,
             showTransform: Transform.identity,
             showOpacity: 1,
             showOrigin: [0.5, 0.5],
-            outTransform: Transform.scale(0.001, 0.001, 0.001),
-            outTransition: { duration: 0, curve: 'linear' },
+            outTransform: Transform.rotateX(Math.PI/2),
+            outTransition: { duration: 400, curve: 'easeOut' }
         },
         eggSize: [250, 25],
-        eggText: 'Copyright (c) 2014 Peace Chen',
+        eggText: 'Copyright (c) 2014 Peace Chen'
     };
 
     function _createDesktop() {
         this.desktopSurface = new Surface({
-            classes: ['desktop'],
+            classes: ['desktop']
         });
         this.add(this.desktopSurface);
 
@@ -102,26 +107,23 @@ define(function(require, exports, module) {
         this.dockView = new DockView({
             desktopSurface: this.desktopSurface });
 
-        var dockModifier = new StateModifier({
+        this.dockView.dockModifier = new StateModifier({
             origin: [0, 1],
             align : [0, 1]
         });
 
-        this.add(dockModifier).add(this.dockView);
+        this.add(this.dockView.dockModifier).add(this.dockView);
     }
 
     //------------------------------------------------------------------------
     function _createLightbox() {
         this.lightbox = new Lightbox(this.options.lightboxOpts);
-        this.windowSurface = new ImageSurface({
-            classes: ['window'],
-        });
         this.windowModifier = new StateModifier({
-            origin: [0.5, 0.5],
-            align : [0.5, 0.5],
+            origin: [0.5, 0.6],
+            align : [0.5, 0.5]
         });
         this.windowModifier.setOpacity(1, { duration:0, curve: 'linear' }, function() {
-            //Callback allows us to get the size of the desktopSurface to fit the windowSurface
+            //Callback allows us to get the size of the desktopSurface to fit the imgSurface
             this.desktopSize = this.desktopSurface.getSize();
             var fit = Math.min(this.desktopSize[0], this.desktopSize[1]) * 0.5;
             this.windowModifier.setSize([fit, fit]);
@@ -132,16 +134,34 @@ define(function(require, exports, module) {
     //------------------------------------------------------------------------
     function _setListeners() {
         this.dockView.on('openWindow', function(data) {
-            // For this demo we simplistically re-use a single surface,
-            // changing the image source corresponding to each icon. In a real
-            // app, different surfaces might represent windows or any other
-            // unique content.
-            this.windowSurface.setContent(data);
-            this.lightbox.show(this.windowSurface);
-
-            if(data === "img/icons/Write.png") {
-                this._showEgg();
+            // Demo different surface contents: web page, video, image.
+            if(data === "img/icons/Web.png") { //Web page
+                this.webSurface = new Surface({
+                    classes: ['window'],
+                    content: '<iframe width="100%" height="100%" src="http://www.ibm.com/developerworks/library/wa-famous/"></iframe>',
+                    size: [this.desktopSize[0]/1.1, this.desktopSize[1]/1.35]
+                });
+                this.lightbox.show(this.webSurface);
             }
+            else if(data === "img/icons/Music.png") { //YouTube
+                this.webSurface = new Surface({
+                    classes: ['window'],
+                    content: '<iframe width="100%" height="100%" src="http://www.youtube.com/embed/g9qKuBzExTw?start=357&autoplay=1&rel=1" frameborder="0" allowfullscreen></iframe>',
+                    size: [this.desktopSize[0]/1.1, this.desktopSize[1]/1.35]
+                });
+                this.lightbox.show(this.webSurface);
+            }
+            else {
+                this.imgSurface = new ImageSurface({ //Icon
+                    classes: ['window'],
+                    content: data
+                });
+                this.lightbox.show(this.imgSurface);
+            }
+
+            if(data === "img/icons/Write.png")
+                this._showEgg();
+
         }.bind(this));
     }
 
