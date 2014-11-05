@@ -17,6 +17,7 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 define(function(require, exports, module) {
+    var Engine          = require('famous/core/Engine');
     var View            = require('famous/core/View');
     var Surface         = require('famous/core/Surface');
     var Transform       = require('famous/core/Transform');
@@ -133,7 +134,7 @@ define(function(require, exports, module) {
 
     //------------------------------------------------------------------------
     function _setListeners() {
-        this.dockView.on('openWindow', function(data) {
+        Engine.on('openWindow', function(data) {
             // Demo different surface contents: web page, video, image.
             if(data === "img/icons/Web.png") { //Web page
                 this.webSurface = new Surface({

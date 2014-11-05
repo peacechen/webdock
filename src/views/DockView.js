@@ -64,11 +64,12 @@ define(function(require, exports, module) {
         this.iconViews = [];
         this.sequentialLayout.sequenceFrom(this.iconViews);
 
-        this.sequentialLayout.seqLayoutModifier = new StateModifier({
-            origin: [0, 0],
-            align : [0, 0]
-        });
+        this.sequentialLayout.seqLayoutModifier = new StateModifier();
         this.sequentialLayout.seqLayoutModifier.setOpacity(1, { duration:0, curve: 'linear' }, function() {
+            //Center seq layout
+            var xOffset = this.options.desktopSurface.getSize()[0] * 0.05; //5% margin
+            this.sequentialLayout.seqLayoutModifier.setTransform( Transform.translate(xOffset, 0, 0) );
+            
             //Add icons in callback so we can get the size of the desktopSurface.
             //The icon sizes are scaled based on the width of the browser.
             if(this.options.desktopSurface != {}) {
@@ -83,17 +84,15 @@ define(function(require, exports, module) {
 
             // Fan-out effect when first showing the dock icons.
             // The distance from the center to any icon is relative to its position in the SequentialLayout.
-            var xOffset = 0.05*this.options.desktopSurface.getSize()[0]; //5% margin
             for (var i=0; i < this.options.menuData.length; i++) {
                 this.iconViews.push( new IconView({
                     iconSize: this.iconSize,
-                    xOffset: xOffset,
                     xOffsetStart: this.center - this.iconSize*i,
                     yOffsetStart: this.iconSize,
                     iconUrl: this.options.menuData[i].iconUrl,
                     title: this.options.menuData[i].title,
                     pageView: this.options.pageView,
-                    dockView: this
+                    containerModifier: this.sequentialLayout.seqLayoutModifier
                 }));
             }
 
