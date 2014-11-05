@@ -17,6 +17,7 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 define(function(require, exports, module) {
+    var Engine        = require('famous/core/Engine');
     var View          = require('famous/core/View');
     var Surface       = require('famous/core/Surface');
     var Transform     = require('famous/core/Transform');
@@ -46,7 +47,7 @@ define(function(require, exports, module) {
         yOffsetStart: 64,  //""
         iconUrl: '',
         hoverTransition: { duration: 400, curve: 'easeOut' },
-        dockView: {},
+        containerModifier: {},
     };
 
     //------------------------------------------------------------------------
@@ -79,40 +80,47 @@ define(function(require, exports, module) {
             return this.size.get();
         }.bind(this);
         this.originalGetSize = this.iconSurface.getSize;
+        this.containerOrigXoffset = this.options.containerModifier.getTransform()[12];
 
         // When hovering over icon, expand its size.
         this.iconSurface.on('mouseover', function () {
             //End any in-progress animations to eliminate hysteresis
             this.size.halt();
             this.initModifier.halt();
+            this.options.containerModifier.halt();
 
             // Performance note - this function executes on every tick. Keep it short.
             this.iconSurface.getSize = transitionGetSize;
 
-            //Expand container size
+            //Expand boundary
             this.size.set( [this.options.iconSize*2, this.options.iconSize*2], this.options.hoverTransition );
 
             //Expand icon size
             this.initModifier.setTransform( Transform.scale(2, 2, 1), this.options.hoverTransition );
+
+            //Adjust container position
+            this.options.containerModifier.setTransform( Transform.translate(this.options.iconSize/2, 0, 0), 
+                                                         this.options.hoverTransition );
         }.bind(this));
 
         // Leaving icon; restore its original size.
         this.iconSurface.on('mouseout', function () {
             this.size.halt();
             this.initModifier.halt();
+            this.options.containerModifier.halt();
 
             this.size.set([this.options.iconSize, this.options.iconSize], this.options.hoverTransition, function(){
                 //Restore original getSize after transition completes.
                 this.iconSurface.getSize = this.originalGetSize;
             }.bind(this));
             this.initModifier.setTransform( Transform.scale(1, 1, 1), this.options.hoverTransition );
+            this.options.containerModifier.setTransform( Transform.translate(this.containerOrigXoffset, 0, 0), 
+                                                         this.options.hoverTransition );
         }.bind(this));
 
-        // Forward click to DockView
+        // Forward click
         this.iconSurface.on('click', function () {
-            if(this.options.dockView != {}) {
-                this.options.dockView._eventOutput.emit('openWindow', this.options.iconUrl);
-            }
+            Engine.emit('openWindow', this.options.iconUrl);
         }.bind(this));
     }
 
