@@ -41,13 +41,11 @@ define(function(require, exports, module) {
 
     IconView.DEFAULT_OPTIONS = {
         iconSize: 64,
-        xOffset: 0,
-        yOffset: -25,
         xOffsetStart: 0, //Override these to enhance startup animation
         yOffsetStart: 64,  //""
         iconUrl: '',
         hoverTransition: { duration: 400, curve: 'easeOut' },
-        containerModifier: {},
+        containerModifier: {}
     };
 
     //------------------------------------------------------------------------
@@ -61,7 +59,7 @@ define(function(require, exports, module) {
         });
 
         this.initModifier = new StateModifier({
-            origin: [0, 1],
+            origin : [0, 1],
             align : [0, 1]
         });
 
@@ -99,7 +97,7 @@ define(function(require, exports, module) {
             this.initModifier.setTransform( Transform.scale(2, 2, 1), this.options.hoverTransition );
 
             //Adjust container position
-            this.options.containerModifier.setTransform( Transform.translate(this.options.iconSize/2, 0, 0), 
+            this.options.containerModifier.setTransform( Transform.translate(this.options.iconSize/2, 0, 0),
                                                          this.options.hoverTransition );
         }.bind(this));
 

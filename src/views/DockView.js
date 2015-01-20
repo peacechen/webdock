@@ -36,14 +36,11 @@ define(function(require, exports, module) {
     DockView.prototype.constructor = DockView;
     DockView.prototype.animateIcons = function() {
         var transition = this.options.transition;
-        var xOffset, yOffset;
         var delay = this.options.staggerDelay;
         for(var i = 0; i < this.iconViews.length; i++) {
-            xOffset = this.iconViews[i].options.xOffset;
-            yOffset = this.iconViews[i].options.yOffset;
             Timer.setTimeout(function(i) {
                 this.iconViews[i].positionModifier.setTransform(
-                    Transform.translate( xOffset, yOffset, 0), transition);
+                    Transform.translate( 0, 0, 0), transition);
             }.bind(this, i), i * delay);
         }
     };
@@ -64,7 +61,10 @@ define(function(require, exports, module) {
         this.iconViews = [];
         this.sequentialLayout.sequenceFrom(this.iconViews);
 
-        this.sequentialLayout.seqLayoutModifier = new StateModifier();
+        this.sequentialLayout.seqLayoutModifier = new StateModifier({
+            origin: [0.5, 0.95],
+            align : [0.5, 0.95]
+        });
         this.sequentialLayout.seqLayoutModifier.setOpacity(1, { duration:0, curve: 'linear' }, function() {
             //Center seq layout
             var xOffset = this.options.desktopSurface.getSize()[0] * 0.05; //5% margin
@@ -81,6 +81,7 @@ define(function(require, exports, module) {
                 this.iconSize = IconView.DEFAULT_OPTIONS.iconSize;
                 this.center = 500;
             }
+            this.sequentialLayout.seqLayoutModifier.setSize([undefined, this.iconSize]);
 
             // Fan-out effect when first showing the dock icons.
             // The distance from the center to any icon is relative to its position in the SequentialLayout.
@@ -88,7 +89,7 @@ define(function(require, exports, module) {
                 this.iconViews.push( new IconView({
                     iconSize: this.iconSize,
                     xOffsetStart: this.center - this.iconSize*i,
-                    yOffsetStart: this.iconSize,
+                    yOffsetStart: this.iconSize*2,
                     iconUrl: this.options.menuData[i].iconUrl,
                     title: this.options.menuData[i].title,
                     pageView: this.options.pageView,
