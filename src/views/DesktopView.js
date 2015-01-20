@@ -41,7 +41,7 @@ define(function(require, exports, module) {
     DesktopView.prototype.constructor = DesktopView;
 
     DesktopView.prototype._showWeb = function() {
-    }
+    };
 
     DesktopView.prototype._showEgg = function() {
         if(typeof(this.eggSurface) != 'undefined')
@@ -59,7 +59,7 @@ define(function(require, exports, module) {
         var xShift = this.desktopSize[0]-this.options.eggSize[0];
         eggModifier.setTransform(Transform.thenMove(Transform.rotateZ(0), [xShift,0,0]),
             {duration: 800, curve: Easing.outBack});
-    }
+    };
 
     DesktopView.DEFAULT_OPTIONS = {
         logoSize: 50,
