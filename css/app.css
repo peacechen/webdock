@@ -13,8 +13,13 @@ body {
 
 .desktop {
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    background-image: url('../img/blue_bokeh_background.jpg');
-    background-color: #2E6F95;
+    background: #2E6F95 url('../img/blue_bokeh_background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'images/'.$pic.'Bg.jpg\', sizingMethod=\'scale\');
+    -ms-filter: \"progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'images/'.$pic.'Bg.jpg\', sizingMethod=\'scale\')\";
 }
 
 .window {
