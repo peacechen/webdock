@@ -90,8 +90,9 @@ define(function(require, exports, module) {
 
         this.logoSurface = new Surface({
             size: [this.options.logoSize, this.options.logoSize],
-            content: '<a href="http://famo.us"><img src="img/famous.png"></a>',
+            content: '<a href="https://github.com/peacechen"><img width="100%" src="https://avatars0.githubusercontent.com/u/6295083?s=400&u=29519dd19d46943b1bd9e6ff6645531b6cf3d257&v=4"></a>',
             properties: {
+              padding: '4px'
             }
         });
 
@@ -139,7 +140,7 @@ define(function(require, exports, module) {
             if(data === "img/icons/Web.png") { //Web page
                 this.webSurface = new Surface({
                     classes: ['window'],
-                    content: '<iframe width="100%" height="100%" src="http://www.ibm.com/developerworks/library/wa-famous/"></iframe>',
+                    content: '<iframe width="100%" height="100%" src="https://famo.us/"></iframe>',
                     size: [this.desktopSize[0]/1.1, this.desktopSize[1]/1.35]
                 });
                 this.lightbox.show(this.webSurface);
