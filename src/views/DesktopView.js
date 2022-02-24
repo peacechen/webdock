@@ -140,7 +140,7 @@ define(function(require, exports, module) {
             if(data === "img/icons/Web.png") { //Web page
                 this.webSurface = new Surface({
                     classes: ['window'],
-                    content: '<iframe width="100%" height="100%" src="https://famo.us/"></iframe>',
+                    content: '<iframe width="100%" height="100%" src="http://deprecated.famous.org"></iframe>',
                     size: [this.desktopSize[0]/1.1, this.desktopSize[1]/1.35]
                 });
                 this.lightbox.show(this.webSurface);
@@ -148,7 +148,7 @@ define(function(require, exports, module) {
             else if(data === "img/icons/Music.png") { //YouTube
                 this.webSurface = new Surface({
                     classes: ['window'],
-                    content: '<iframe width="100%" height="100%" src="http://www.youtube.com/embed/g9qKuBzExTw?start=357&autoplay=1&rel=1" frameborder="0" allowfullscreen></iframe>',
+                    content: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/2qN_3HITC7U" frameborder="0" allowfullscreen></iframe>',
                     size: [this.desktopSize[0]/1.1, this.desktopSize[1]/1.35]
                 });
                 this.lightbox.show(this.webSurface);
